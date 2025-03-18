@@ -1,3 +1,26 @@
+## Changes (March 18, 2025)
+
+I attempted to reproduce this solution and had to make some fixes:
+
+* Changed jni_hello.nim in dali repo https://github.com/vitalnodo/dali/commit/5239a7dc80bfc10754784de386f51ae19b1b8f77
+
+So I needed to change links to dali and hellomello repositories in the instruction below.
+
+* Regenerated the key and certificate
+```bash
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out key.pem
+openssl pkcs8 -topk8 -inform PEM -outform DER -nocrypt -in key.pem -out key.pk8
+openssl req -new -x509 -key key.pem -out key.x509.pem -days 3650 -subj "/CN=HelloDaliJNI"
+```
+
+* Downloaded and extracted NDK r19c from https://github.com/android/ndk/wiki/Unsupported-Downloads#r19c and extracted it to /opt
+```bash
+unzip android-ndk-r19c-linux-x86_64.zip -d /opt
+```
+So changed nim.cfg accordingly.
+
+✅ After these changes, the solution works on Android 13
+
 HelloWorld.apk built with Nim and no Android Studio
 ===================================================
 
@@ -22,7 +45,7 @@ Build Steps
 
 1. Compile the native JNI code, using Nim + Android NDK:
 
-       $ git clone https://github.com/akavel/hellomello
+       $ git clone https://github.com/vitalnodo/hellomello
          # Edit `nim.cfg`: change `--clang.path=...` to a correct path to clang in your Android NDK directory.
          # Also: remove `.cmd` suffixes in `nim.cfg` if you are on Linux.
        $ cd hellomello
@@ -32,9 +55,9 @@ Build Steps
        $ mv libhello.so lib/armeabi-v7a/libhello-mello.so
        $ cd ..
 
-2. Assemble the Dalvik bytecode (required to wrap the JNI library), using [dali](https://github.com/akavel/dali):
+2. Assemble the Dalvik bytecode (required to wrap the JNI library), using [dali](https://github.com/vitalnodo/dali):
 
-       $ git clone https://github.com/akavel/dali
+       $ git clone https://github.com/vitalnodo/dali
        $ cd dali
        $ nim c jni_hello.nim
        $ ./jni_hello > ../hellomello/classes.dex
