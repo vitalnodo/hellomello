@@ -11,9 +11,9 @@ srcDir        = "src"
 
 requires "nim >= 1.0.2"
 requires "dali 0.4.0"
-# requires "https://github.com/akavel/jnim#dali"
+#requires "https://github.com/akavel/jnim#dali"
 requires "jnim"
-requires "https://github.com/akavel/android#dali"
+requires "https://github.com/vitalnodo/android#master-fix"
 # requires "android"
 
 
